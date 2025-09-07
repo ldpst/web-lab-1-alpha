@@ -3,12 +3,24 @@ export class GraphDrawer {
     constructor(canvasId) {
         this.canvas = document.getElementById(canvasId);
         this.ctx = this.canvas.getContext('2d');
-        this.canvas.width = 400;
-        this.canvas.height = 400;
-        this.center = { x: this.canvas.width / 2, y: this.canvas.height / 2 };
-        this.baseScale = this.canvas.width / 3;
         this.currentR = null;
         this.currentPoints = [];
+
+        this.resizeCanvas()
+        window.addEventListener("resize", () => this.resizeCanvas())
+    }
+
+    resizeCanvas() {
+        this.canvas.width = this.canvas.clientWidth;
+        this.canvas.height = this.canvas.clientHeight;
+
+        this.center = {
+            x: this.canvas.width / 2,
+            y: this.canvas.height / 2
+        };
+
+        this.baseScale = Math.min(this.canvas.width, this.canvas.height) / 3;
+        this.drawGraph(this.currentR);
     }
 
     clearCurrentPoints() {
@@ -82,7 +94,7 @@ export class GraphDrawer {
         // Фигуры - область
         ctx.fillStyle = 'rgba(97,166,90,0.5)';
 
-        // Прямоугольник во II квадранте (x ∈ [-R/2,0], y ∈ [0,R])
+        // Прямоугольник во I квадранте
         ctx.fillRect(
             center.x,
             center.y - baseScale,
@@ -92,16 +104,16 @@ export class GraphDrawer {
 
         // Треугольник во II квадранте
         ctx.beginPath();
-        ctx.moveTo(center.x, center.y);                    // (0,0)
-        ctx.lineTo(center.x - baseScale / 2, center.y);    // (−R/2, 0)
-        ctx.lineTo(center.x, center.y - baseScale / 2);        // (0, R/2)
+        ctx.moveTo(center.x, center.y);
+        ctx.lineTo(center.x - baseScale / 2, center.y);
+        ctx.lineTo(center.x, center.y - baseScale / 2);
         ctx.closePath();
         ctx.fill();
 
-        // Четверть круга в IV квадранте (x ≥ 0, y ≤ 0), радиус = R
+        // Четверть круга в IV квадранте
         ctx.beginPath();
-        ctx.moveTo(center.x, center.y); // начало в (0,0)
-        ctx.arc(center.x, center.y, baseScale, 0, Math.PI/2, false);
+        ctx.moveTo(center.x, center.y);
+        ctx.arc(center.x, center.y, baseScale, 0, Math.PI / 2, false);
         ctx.closePath();
         ctx.fill();
 
@@ -176,6 +188,6 @@ export class GraphDrawer {
     canvasToGraphCoords(canvasX, canvasY) {
         const x = (canvasX - this.center.x) / this.baseScale * this.currentR;
         const y = (this.center.y - canvasY) / this.baseScale * this.currentR;
-        return { x, y };
+        return {x, y};
     }
 }
