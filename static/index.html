@@ -25,7 +25,28 @@
             <table id="graph-table">
                 <tr>
                     <td>
-                        <div>X</div>
+                        <div class="center-wrapper">
+                            <div class="btns">
+                                <div class="select-headers">
+                                    <span class="select-header">Выберите X:</span>
+                                    <div class="center-wrapper">
+                                        <span class="select-header">Выбрано:</span>
+                                        <span class="select-header" id="x-val">1</span>
+                                    </div>
+                                </div>
+                                <div class="center-wrapper" style="padding: 3%">
+                                    <button class="x-btn">-4</button>
+                                    <button class="x-btn">-3</button>
+                                    <button class="x-btn">-2</button>
+                                    <button class="x-btn">-1</button>
+                                    <button class="x-btn">0</button>
+                                    <button class="x-btn">1</button>
+                                    <button class="x-btn">2</button>
+                                    <button class="x-btn">3</button>
+                                    <button class="x-btn">4</button>
+                                </div>
+                            </div>
+                        </div>
                     </td>
                     <td rowspan="4">
                         <div id="graph-container">
@@ -35,27 +56,57 @@
                 </tr>
                 <tr>
                     <td>
-                        <div>Y</div>
+                        <div class="center-wrapper">
+                            <div class="btns">
+                                <div class="select-headers">
+                                    <span class="select-header">Введите Y:</span>
+                                    <span class="select-header">(3..3)</span>
+                                </div>
+                                <div class="center-wrapper" style="padding: 3%">
+                                    <label for="y-input"></label><input id="y-input" placeholder="1">
+                                </div>
+                            </div>
+                        </div>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <div>R</div>
+                        <div class="center-wrapper">
+                            <div class="btns">
+                                <div style="padding: 3%">
+                                    <span class="select-header" style="padding-right: 3%">Выберите R:</span>
+                                    <label>
+                                        <select>
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                            <option>5</option>
+
+                                        </select>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <div>send</div>
+                        <div class="center-wrapper">
+                            <div>
+                                <button id="send-btn">ОТПРАВИТЬ</button>
+                            </div>
+                        </div>
                     </td>
                 </tr>
             </table>
         </div>
+        <button id="switch-btn">switch</button>
     </div>
 </div>
 
 
 <!-- JS Scripts -->
-
 
 <script type="module" src="./js/net/fetch.js"></script>
 
