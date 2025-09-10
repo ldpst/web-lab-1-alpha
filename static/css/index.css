@@ -63,20 +63,54 @@ body {
 }
 
 .btns {
+    display: flex;
+    flex-direction: column;
     border: #9e9d9d solid 1px;
     border-radius: 15px;
     width: 100%;
+    position: relative;
 }
 
 .x-btn {
-
+    cursor: pointer;
 }
 
 .x-btn.selected {
+    border: black solid 1px;
+    border-radius: 3px;
     background: #8ac380;
 }
 
+.input-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.error {
+    position: absolute;
+    top: 90%;
+    left: auto;
+    background: #ffe0e0;
+    color: red;
+    font-size: 13px;
+    padding: 4px 8px;
+    border: 1px solid red;
+    border-radius: 4px;
+    white-space: nowrap;
+    z-index: 10;
+}
+
+
+#x-error {
+    display: none;
+}
+
+#y-error {
+    display: none;
+}
+
 #send-btn {
+    cursor: pointer;
     border-radius: 15px;
     border: #9e9d9d solid 1px;
     width: 150px;
