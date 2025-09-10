@@ -12,6 +12,7 @@ body {
     background-image: url("../resources/monkey.jpg");
     background-repeat: no-repeat;
     background-size: cover;
+    background-attachment: fixed;
     background-position: center;
 
     display: flex;
@@ -65,6 +66,14 @@ body {
     border: #9e9d9d solid 1px;
     border-radius: 15px;
     width: 100%;
+}
+
+.x-btn {
+
+}
+
+.x-btn.selected {
+    background: #8ac380;
 }
 
 #send-btn {
@@ -142,6 +151,30 @@ body {
     justify-content: space-between;
     margin: 10px;
 
+}
+
+#res-table {
+    border-collapse: collapse;
+    width: 85%;
+    margin: 20px auto;
+}
+
+#res-table td {
+    border: #9e9d9d solid 1px;
+    text-align: center;
+}
+
+#res-table th {
+    padding: 0;
+    margin: 0;
+}
+
+.res-header-div {
+    background-color: rgb(143, 191, 135);
+    border: #9e9d9d solid 1px;
+    border-bottom: none;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
 }
 
 
