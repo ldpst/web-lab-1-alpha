@@ -1,14 +1,15 @@
 body {
     margin: 0;
     padding: 0;
-
 }
 
 #screen {
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
+    height: 100%;
     justify-content: center;
-    background-color: #010101;
+
+
     background-image: url("../resources/monkey.jpg");
     background-repeat: no-repeat;
     background-size: cover;
@@ -63,20 +64,58 @@ body {
 }
 
 .btns {
+    display: flex;
+    flex-direction: column;
     border: #9e9d9d solid 1px;
     border-radius: 15px;
     width: 100%;
+    position: relative;
 }
 
 .x-btn {
-
+    cursor: pointer;
 }
 
 .x-btn.selected {
+    border: black solid 1px;
+    border-radius: 3px;
     background: #8ac380;
 }
 
+.input-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.error {
+    position: absolute;
+    top: 90%;
+    left: auto;
+    background: #ffe0e0;
+    color: red;
+    font-size: 13px;
+    padding: 4px 8px;
+    border: 1px solid red;
+    border-radius: 4px;
+    white-space: nowrap;
+    z-index: 10;
+}
+
+#send-error {
+    display: none;
+    margin-top: 1px;
+}
+
+#x-error {
+    display: none;
+}
+
+#y-error {
+    display: none;
+}
+
 #send-btn {
+    cursor: pointer;
     border-radius: 15px;
     border: #9e9d9d solid 1px;
     width: 150px;

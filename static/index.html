@@ -16,7 +16,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WEB Lab1</title>
 
-    <link rel="stylesheet" href="./css/index.css">
+    <link rel="stylesheet" href="./css/index.css?v=2">
 </head>
 <body>
 <div id="screen">
@@ -44,15 +44,11 @@
                 <tr>
                     <td>
                         <div class="center-wrapper">
-                            <div class="btns">
+                            <div class="btns" style=" padding-bottom: 3%">
                                 <div class="select-headers">
                                     <span class="select-header">Выберите X:</span>
-                                    <div class="center-wrapper">
-                                        <span class="select-header">Выбрано:</span>
-                                        <span class="select-header" id="x-val">1</span>
-                                    </div>
                                 </div>
-                                <div class="center-wrapper" style="padding: 3%">
+                                <div class="center-wrapper">
                                     <button class="x-btn">-4</button>
                                     <button class="x-btn">-3</button>
                                     <button class="x-btn">-2</button>
@@ -62,6 +58,9 @@
                                     <button class="x-btn">2</button>
                                     <button class="x-btn">3</button>
                                     <button class="x-btn">4</button>
+                                </div>
+                                <div class="center-wrapper">
+                                    <div id="x-error" class="error">❌ Выберите значение</div>
                                 </div>
                             </div>
                         </div>
@@ -78,10 +77,14 @@
                             <div class="btns">
                                 <div class="select-headers">
                                     <span class="select-header">Введите Y:</span>
-                                    <span class="select-header">(3..3)</span>
+                                    <span class="select-header">(-3..3)</span>
                                 </div>
                                 <div class="center-wrapper" style="padding: 3%">
-                                    <label for="y-input"></label><input id="y-input" placeholder="1">
+                                    <div class="input-wrapper">
+                                        <label for="y-input"></label><input id="y-input" placeholder="1"
+                                                                            pattern="[0-9]+">
+                                        <div id="y-error" class="error">❌ Введите в формате числа (от -3 до 3)</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -94,7 +97,7 @@
                                 <div style="padding: 3%">
                                     <span class="select-header" style="padding-right: 3%">Выберите R:</span>
                                     <label>
-                                        <select>
+                                        <select id="r-select">
                                             <option>1</option>
                                             <option>2</option>
                                             <option>3</option>
@@ -111,59 +114,51 @@
                 <tr>
                     <td>
                         <div class="center-wrapper">
-                            <div>
+                            <div class="input-wrapper">
                                 <button id="send-btn">ОТПРАВИТЬ</button>
+                                <div id="send-error" class="error">❌ Сервер недоступен :c</div>
                             </div>
                         </div>
                     </td>
                 </tr>
             </table>
         </div>
-            <table id="res-table">
-                <tr>
-                    <th colspan="6">
-                        <div class="res-header-div">
-                            Таблица
-                        </div>
-                    </th>
-                </tr>
-                <tr>
-                    <td>
-                        X
-                    </td>
-                    <td>
-                        Y
-                    </td>
-                    <td>
-                        R
-                    </td>
-                    <td>
-                        Время выполнения
-                    </td>
-                    <td>
-                        Дата
-                    </td>
-                    <td>
-                        Попадание (Y/N)
-                    </td>
-                </tr>
-                <tr>
-                    <td>123455555</td>
-                    <td>123455555</td>
-                    <td>123455555</td>
-                    <td>3s</td>
-                    <td>15:13 Tue 15 April</td>
-                    <td>Y</td>
-                </tr>
-            </table>
+        <table id="res-table">
+            <tr>
+                <th colspan="6">
+                    <div class="res-header-div">
+                        Таблица
+                    </div>
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    X
+                </td>
+                <td>
+                    Y
+                </td>
+                <td>
+                    R
+                </td>
+                <td>
+                    Время выполнения
+                </td>
+                <td>
+                    Дата
+                </td>
+                <td>
+                    Попадание (Y/N)
+                </td>
+            </tr>
+        </table>
     </div>
 </div>
 
 
 <!-- JS Scripts -->
 
-<script src="./js/logic.js"></script>
-<script type="module" src="./js/net/fetch.js"></script>
+<script type="module" src="./js/logic.js"></script>
 
 
 <!-- JS Scripts -->

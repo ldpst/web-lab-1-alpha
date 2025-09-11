@@ -3,6 +3,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    depends_on:
+      - shoots-db
     networks:
       backend:
 
@@ -13,6 +15,15 @@ services:
     volumes:
       - "./httpd.conf:/usr/local/apache2/conf/httpd.conf"
       - "./static:/var/www/"
+    networks:
+      backend:
+
+  shoots-db:
+    image: "postgres:latest"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: passsword
+      POSTGRES_DB: shoots
     networks:
       backend:
 networks:
