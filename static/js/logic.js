@@ -37,6 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     const sendBtn = document.getElementById("send-btn");
+    const sendError = document.getElementById("send-error");
     const xError = document.getElementById("x-error");
     const yInput = document.getElementById("y-input");
     const yError = document.getElementById("y-error");
@@ -66,10 +67,13 @@ document.addEventListener("DOMContentLoaded", () => {
             body: JSON.stringify(data)
         }).then(response => {
             return response.json();
-        })
-            .then(json => {
+        }).then(json => {
             addToTable(json);
         }).catch(err => {
+            sendError.style.display = "block";
+            setTimeout(() => {
+                sendError.style.display = "none";
+            }, 5000);
             console.log(err);
         });
     });
@@ -109,9 +113,4 @@ function checkX(error) {
         error.style.display = "none";
         return true;
     }
-}
-
-
-function getSelected() {
-    return selected;
 }

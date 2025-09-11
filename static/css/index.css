@@ -101,6 +101,10 @@ body {
     z-index: 10;
 }
 
+#send-error {
+    display: none;
+    margin-top: 1px;
+}
 
 #x-error {
     display: none;
