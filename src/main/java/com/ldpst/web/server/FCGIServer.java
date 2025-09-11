@@ -2,7 +2,7 @@ package com.ldpst.web.server;
 
 import com.fastcgi.FCGIInterface;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.ldpst.web.Checker;
+import com.ldpst.web.utils.Checker;
 import com.ldpst.web.utils.PSQLManager;
 import com.ldpst.web.utils.RequestManager;
 import com.ldpst.web.utils.ResultManager;
