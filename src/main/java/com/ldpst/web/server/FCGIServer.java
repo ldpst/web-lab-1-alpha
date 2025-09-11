@@ -11,11 +11,9 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Map;
-import java.util.logging.Logger;
 
 public class FCGIServer extends FCGIInterface {
-    private static Logger logger = Logger.getLogger(FCGIServer.class.getName());
-    private static PSQLManager psql = new PSQLManager();
+    private final static PSQLManager psql = new PSQLManager();
 
     public FCGIServer() {
         super();

@@ -13,11 +13,11 @@ import java.time.LocalDateTime;
 import java.util.Map;
 
 public class PSQLManager {
-    private String url = "jdbc:postgresql://shoots-db:5432/shoots";
-    private String user = "postgres";
-    private String password = "passsword"; // я знаю, что так делать нельзя
+    private final String url = "jdbc:postgresql://shoots-db:5432/shoots";
+    private final String user = "postgres";
+    private final String password = "passsword"; // я знаю, что так делать нельзя
 
-    private String createTableSQL = """
+    private final String createTableSQL = """
             CREATE TABLE IF NOT EXISTS shoots (
                 id SERIAL PRIMARY KEY,
                 x TEXT,
