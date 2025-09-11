@@ -43,8 +43,8 @@ public class FCGIServer extends FCGIInterface {
             return;
         }
         if (method.equals("POST")) {
-            long start = System.nanoTime();
             String requestBodyString = RequestManager.readRequestBody();
+            long start = System.nanoTime();
             Map<String, BigDecimal> requestBody;
             try {
                 requestBody = RequestManager.parseRequestBody(requestBodyString);
@@ -63,7 +63,7 @@ public class FCGIServer extends FCGIInterface {
 
             boolean check = Checker.check(requestBody);
 
-            String duration = (System.nanoTime() - start / 1e6) + " ms";
+            String duration = Math.round(((System.nanoTime() - start) / 1e6) * 1e6) / 1e6 + " ms";
             LocalDateTime end = LocalDateTime.now();
 
             String result = ResultManager.successResult(requestBody, duration, end, check);
