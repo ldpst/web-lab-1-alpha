@@ -1,56 +1,29 @@
 package com.ldpst.web;
 
-import com.fastcgi.FCGIInterface;
+import com.ldpst.web.server.FCGIServer;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 public class Server {
     public static void main(String[] args) throws IOException {
-        var fcgiInterface = new FCGIInterface();
-        while (fcgiInterface.FCGIaccept() >= 0) {
-            var method = FCGIInterface.request.params.getProperty("REQUEST_METHOD");
-            if (method == null) {
-                System.out.println(errorResult("Unsupported HTTP method: null"));
-                continue;
-            }
+        FCGIServer server = new FCGIServer();
+        server.start();
 
-            if (method.equals("POST")) {
-                var contentType = FCGIInterface.request.params.getProperty("CONTENT_TYPE");
-                if (contentType == null) {
-                    System.out.println(errorResult("Content-Type is null"));
-                    continue;
-                }
-
-                if (!contentType.equals("application/x-www-form-urlencoded")) {
-                    System.out.println(errorResult("Content-Type is not supported"));
-                    continue;
-                }
-            }
-
-            String ok = """
-                    Content-Type: application/json; charset=utf-8
-                    Content-Length: %d
-                    
-                    
-                    %s\n
-                    """;
-
-            String js = """
-                    {"x": 12, "y": 13}
-                    """;
-            System.out.println(ok.formatted(js.getBytes(StandardCharsets.UTF_8).length + 1, js));
-        }
-
-//            System.out.println("req start");
-//            var method = FCGIInterface.request.params.getProperty("REQUEST_METHOD");
-//            if (method == null) {
-//                System.out.println(errorResult("Unsupported HTTP method: null"));
-//                continue;
-//            }
 //
-//            if (method.equals("GET")) {
-//                System.out.println("get");
+//            String ok = """
+//                    Content-Type: application/json; charset=utf-8
+//                    Content-Length: %d
+//
+//
+//                    %s\n
+//                    """;
+//
+//            String js = """
+//                    {"x": 12, "y": 13}
+//                    """;
+//            System.out.println(ok.formatted(js.getBytes(StandardCharsets.UTF_8).length + 1, js));
+
+
 //                var queryString = FCGIInterface.request.params.getProperty("QUERY_STRING");
 //                if (queryString != null && queryString.equals("debug=1")) {
 //                    var paramsDump = FCGIInterface.request
@@ -68,16 +41,7 @@ public class Server {
 //
 //            if (method.equals("POST")) {
 //                System.out.println("post");
-//                var contentType = FCGIInterface.request.params.getProperty("CONTENT_TYPE");
-//                if (contentType == null) {
-//                    System.out.println(errorResult("Content-Type is null"));
-//                    continue;
-//                }
 //
-//                if (!contentType.equals("application/x-www-form-urlencoded")) {
-//                    System.out.println(errorResult("Content-Type is not supported"));
-//                    continue;
-//                }
 //
 //                var requestBody = simpleFormUrlEncodedParsing(readRequestBody());
 //                var xStr = requestBody.get("x");
@@ -107,9 +71,9 @@ public class Server {
 //
 //            System.out.println(errorResult("Unsupported HTTP method: " + method));
 //        }
+        }
     }
-
-    //
+//
 //    private static Properties simpleFormUrlEncodedParsing(String requestBodyStr) {
 //        var props = new Properties();
 //        Arrays.stream(requestBodyStr.split("&"))
@@ -117,32 +81,9 @@ public class Server {
 //        return props;
 //    }
 //
-//    private static String readRequestBody() throws IOException {
-//        FCGIInterface.request.inStream.fill();
 //
-//        var contentLength = FCGIInterface.request.inStream.available();
-//        ByteBuffer buffer = ByteBuffer.allocate(contentLength);
-//        var readBytes = FCGIInterface.request.inStream.read(buffer.array(), 0, contentLength);
 //
-//        var requestBodyRaw = new byte[readBytes];
-//        buffer.get(requestBodyRaw);
-//        buffer.clear();
-//
-//        return new String(requestBodyRaw, StandardCharsets.UTF_8);
-//    }
-//
-    private static String errorResult(String error) {
-        return """
-                HTTP/1.1 400 Bad Request
-                Content-Type: text/html
-                Content-Length: %d
-                
-                
-                %s
-                """.formatted(error.getBytes(StandardCharsets.UTF_8).length, error);
-    }
-}
-//
+
 //    private static String getHelloPage() {
 //        var content = """
 //                    <html>
@@ -196,3 +137,5 @@ public class Server {
 //                %s
 //                """.formatted(content.getBytes(StandardCharsets.UTF_8).length, content);
 //    }
+
+//}
