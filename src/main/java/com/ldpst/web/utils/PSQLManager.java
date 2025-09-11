@@ -11,12 +11,11 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Map;
-import java.util.logging.Logger;
 
 public class PSQLManager {
     private String url = "jdbc:postgresql://shoots-db:5432/shoots";
     private String user = "postgres";
-    private String password = "passsword";
+    private String password = "passsword"; // я знаю, что так делать нельзя
 
     private String createTableSQL = """
             CREATE TABLE IF NOT EXISTS shoots (
@@ -38,7 +37,8 @@ public class PSQLManager {
             Statement stmt = conn.createStatement();
             stmt.execute(createTableSQL);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            System.err.println("Failed to connect to database");
+            e.printStackTrace();
         }
     }
 
@@ -113,8 +113,15 @@ public class PSQLManager {
             return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(array);
 
 
-        } catch (SQLException | JsonProcessingException e) {
-            throw new RuntimeException(e);
+        } catch (SQLException e) {
+            System.err.println("Failed to load data from database:");
+            e.printStackTrace();
+            return null;
+        } catch (JsonProcessingException e) {
+            System.err.println("Failed to convert String to Json");
+            e.printStackTrace();
+            return null;
         }
     }
 }
+

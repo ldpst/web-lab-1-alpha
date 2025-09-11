@@ -9,10 +9,7 @@ import com.ldpst.web.utils.ResultManager;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -41,7 +38,8 @@ public class FCGIServer extends FCGIInterface {
             return;
         }
         if (method.equals("GET")) {
-            return;
+            String js = psql.getShoots();
+            System.out.println(ResultManager.okResult(js));
         }
         if (method.equals("POST")) {
             String requestBodyString = RequestManager.readRequestBody();
@@ -67,7 +65,7 @@ public class FCGIServer extends FCGIInterface {
             String duration = Math.round(((System.nanoTime() - start) / 1e6) * 1e6) / 1e6 + " ms";
             LocalDateTime end = LocalDateTime.now();
 
-            String result = ResultManager.successResult(requestBody, duration, end, check);
+            String result = ResultManager.createdResult(requestBody, duration, end, check);
             psql.addShoot(requestBody, duration, end, check);
             System.out.println(result);
         }

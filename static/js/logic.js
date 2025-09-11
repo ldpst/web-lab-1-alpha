@@ -6,6 +6,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const graphDrawer = new GraphDrawer('graphCanvas');
     graphDrawer.drawGraph(1);
 
+    const getUrl = "http://localhost:2909/api/shoots"
+    fetch(getUrl, {
+        method: "GET"
+    }).then(request => {
+        return request.json()
+    }).then(data => {
+        data.forEach(shoot => {
+            addToTable(shoot);
+        })
+    }).catch(error => {
+        console.log(error)
+    });
+
+
     const scrollTopPanelBtn = document.getElementById("scroll-top-panel-btn");
     const headers = document.getElementById("headers");
     const topPanel = document.getElementById('top-panel');
@@ -77,7 +91,8 @@ document.addEventListener("DOMContentLoaded", () => {
             console.log(err);
         });
     });
-});
+})
+;
 
 function addToTable(data) {
     const resTable = document.getElementById("res-table");

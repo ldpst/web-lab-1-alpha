@@ -22,7 +22,7 @@ public class ResultManager {
                 """.formatted(error.getBytes(StandardCharsets.UTF_8).length, error);
     }
 
-    public static String successResult(Map<String, BigDecimal> requestBody, String duration, LocalDateTime date, boolean check) {
+    public static String createdResult(Map<String, BigDecimal> requestBody, String duration, LocalDateTime date, boolean check) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
 
@@ -49,6 +49,19 @@ public class ResultManager {
                         
                         """;
 
+        return headers.formatted(js.getBytes(StandardCharsets.UTF_8).length + 1, js);
+    }
+
+    public static String okResult(String js) {
+        String headers = """
+                Status: 200 OK
+                Content-Type: application/json; charset=utf-8
+                Content-Length: %d
+                
+                
+                %s
+                
+                """;
         return headers.formatted(js.getBytes(StandardCharsets.UTF_8).length + 1, js);
     }
 }
