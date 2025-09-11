@@ -15,5 +15,14 @@ services:
       - "./static:/var/www/"
     networks:
       backend:
+
+  shoots-db:
+    image: "postgres:latest"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: passsword
+      POSTGRES_DB: shoots
+    networks:
+      backend:
 networks:
   backend:

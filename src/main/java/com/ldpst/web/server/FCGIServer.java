@@ -3,6 +3,7 @@ package com.ldpst.web.server;
 import com.fastcgi.FCGIInterface;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ldpst.web.Checker;
+import com.ldpst.web.utils.PSQLManager;
 import com.ldpst.web.utils.RequestManager;
 import com.ldpst.web.utils.ResultManager;
 
@@ -11,11 +12,13 @@ import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
 public class FCGIServer extends FCGIInterface {
     private static Logger logger = Logger.getLogger(FCGIServer.class.getName());
+    private static PSQLManager psql = new PSQLManager();
 
     public FCGIServer() {
         super();
@@ -32,8 +35,6 @@ public class FCGIServer extends FCGIInterface {
     }
 
     public void handleRequest() throws IOException {
-
-
         var method = FCGIInterface.request.params.getProperty("REQUEST_METHOD");
         if (method == null) {
             System.out.println(ResultManager.errorResult("Unsupported HTTP method: null"));
@@ -67,8 +68,10 @@ public class FCGIServer extends FCGIInterface {
             LocalDateTime end = LocalDateTime.now();
 
             String result = ResultManager.successResult(requestBody, duration, end, check);
+            psql.addShoot(requestBody, duration, end, check);
             System.out.println(result);
         }
+
     }
 
 
