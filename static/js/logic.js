@@ -38,8 +38,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const sendBtn = document.getElementById("send-btn");
     const xError = document.getElementById("x-error");
-    const yInput = document.getElementById("y-input")
-    const yError = document.getElementById("y-error")
+    const yInput = document.getElementById("y-input");
+    const yError = document.getElementById("y-error");
 
     const url = "http://localhost:2909/api/shoot"
     sendBtn.addEventListener("click", () => {
@@ -65,12 +65,26 @@ document.addEventListener("DOMContentLoaded", () => {
             },
             body: JSON.stringify(data)
         }).then(response => {
-            console.log(response);
+            return response.json();
+        })
+            .then(json => {
+            addToTable(json);
         }).catch(err => {
             console.log(err);
         });
     });
 });
+
+function addToTable(data) {
+    const resTable = document.getElementById("res-table");
+    const row = resTable.insertRow(2);
+    row.insertCell(0).textContent = data.x;
+    row.insertCell(1).textContent = data.y;
+    row.insertCell(2).textContent = data.r;
+    row.insertCell(3).textContent = data.duration;
+    row.insertCell(4).textContent = data.date;
+    row.insertCell(5).textContent = data.check ? "Y" : "N";
+}
 
 function checkY(str, error) {
     if (typeof str !== "string" || str.trim() === "" || isNaN(str) || isNaN(Number(str))) {
