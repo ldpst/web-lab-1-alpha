@@ -9,6 +9,25 @@ public class Server {
     public static void main(String[] args) throws IOException {
         var fcgiInterface = new FCGIInterface();
         while (fcgiInterface.FCGIaccept() >= 0) {
+            var method = FCGIInterface.request.params.getProperty("REQUEST_METHOD");
+            if (method == null) {
+                System.out.println(errorResult("Unsupported HTTP method: null"));
+                continue;
+            }
+
+            if (method.equals("POST")) {
+                var contentType = FCGIInterface.request.params.getProperty("CONTENT_TYPE");
+                if (contentType == null) {
+                    System.out.println(errorResult("Content-Type is null"));
+                    continue;
+                }
+
+                if (!contentType.equals("application/x-www-form-urlencoded")) {
+                    System.out.println(errorResult("Content-Type is not supported"));
+                    continue;
+                }
+            }
+
             String ok = """
                     Content-Type: application/json; charset=utf-8
                     Content-Length: %d
@@ -21,6 +40,8 @@ public class Server {
                     {"x": 12, "y": 13}
                     """;
             System.out.println(ok.formatted(js.getBytes(StandardCharsets.UTF_8).length + 1, js));
+        }
+
 //            System.out.println("req start");
 //            var method = FCGIInterface.request.params.getProperty("REQUEST_METHOD");
 //            if (method == null) {
@@ -86,8 +107,9 @@ public class Server {
 //
 //            System.out.println(errorResult("Unsupported HTTP method: " + method));
 //        }
-        }
-//
+    }
+
+    //
 //    private static Properties simpleFormUrlEncodedParsing(String requestBodyStr) {
 //        var props = new Properties();
 //        Arrays.stream(requestBodyStr.split("&"))
@@ -109,16 +131,17 @@ public class Server {
 //        return new String(requestBodyRaw, StandardCharsets.UTF_8);
 //    }
 //
-//    private static String errorResult(String error) {
-//        return """
-//                HTTP/1.1 400 Bad Request
-//                Content-Type: text/html
-//                Content-Length: %d
-//
-//
-//                %s
-//                """.formatted(error.getBytes(StandardCharsets.UTF_8).length, error);
-//    }
+    private static String errorResult(String error) {
+        return """
+                HTTP/1.1 400 Bad Request
+                Content-Type: text/html
+                Content-Length: %d
+                
+                
+                %s
+                """.formatted(error.getBytes(StandardCharsets.UTF_8).length, error);
+    }
+}
 //
 //    private static String getHelloPage() {
 //        var content = """
@@ -173,5 +196,3 @@ public class Server {
 //                %s
 //                """.formatted(content.getBytes(StandardCharsets.UTF_8).length, content);
 //    }
-    }
-}
