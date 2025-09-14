@@ -22,7 +22,6 @@ body {
 }
 
 #mid-panel {
-    max-width: 80%;
     min-width: 100px;
     width: 700px;
     box-shadow: 0 1px 100px rgba(0, 0, 0, 0.5);
@@ -196,11 +195,16 @@ body {
     border-collapse: collapse;
     width: 85%;
     margin: 20px auto;
+    table-layout: fixed;
 }
 
 #res-table td {
     border: #9e9d9d solid 1px;
     text-align: center;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    max-width: 200px;
 }
 
 #res-table th {
@@ -214,6 +218,21 @@ body {
     border-bottom: none;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
+}
+
+svg text {
+    font: italic 16px arial;
+    fill: black
+}
+
+.figures {
+    fill: rgb(143, 191, 135);
+}
+
+
+.chart {
+    width: fit-content;
+    padding: 10px;
 }
 
 

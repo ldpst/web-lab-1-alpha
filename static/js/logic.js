@@ -1,11 +1,8 @@
-import {GraphDrawer} from "./net/graph.js";
+// import {GraphDrawer} from "./net/graphCsv.js";
 
 let selected = null;
 
 document.addEventListener("DOMContentLoaded", () => {
-    const graphDrawer = new GraphDrawer('graphCanvas');
-    graphDrawer.drawGraph(1);
-
     const getUrl = "http://localhost:2909/api/shoots"
     fetch(getUrl, {
         method: "GET"
@@ -24,11 +21,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const headers = document.getElementById("headers");
     const topPanel = document.getElementById('top-panel');
     scrollTopPanelBtn.addEventListener("click", () => {
-        if (scrollTopPanelBtn.innerText === 'v') {
-            scrollTopPanelBtn.innerText = '^';
+        if (scrollTopPanelBtn.innerText === '↓') {
+            scrollTopPanelBtn.innerText = '↑';
             headers.style.display = "flex";
         } else {
-            scrollTopPanelBtn.innerText = 'v';
+            scrollTopPanelBtn.innerText = '↓';
             headers.style.display = "none";
         }
 
@@ -46,9 +43,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     const rSelect = document.getElementById("r-select");
-    rSelect.addEventListener("change", () => {
-        graphDrawer.drawGraph(rSelect.value);
-    });
 
     const sendBtn = document.getElementById("send-btn");
     const sendError = document.getElementById("send-error");
@@ -108,13 +102,22 @@ function addToTable(data) {
 function checkY(str, error) {
     if (typeof str !== "string" || str.trim() === "" || isNaN(str) || isNaN(Number(str))) {
         error.style.display = "block";
+        error.textContent = "❌ Введите в формате числа (от -3 до 3)";
         return false;
     } else {
         if (-3 <= Number(str) && Number(str) <= 3) {
-            error.style.display = "none";
-            return true;
+            const decimalPart = str.split('.')[1];
+            if (decimalPart && decimalPart.length > 10) {
+                error.style.display = "block";
+                error.textContent = "❌ Слишком много цифр после точки (макс. 10)";
+                return false;
+            } else {
+                error.style.display = "none";
+                return true;
+            }
         } else {
             error.style.display = "block";
+            error.textContent = "❌ Введите в формате числа (от -3 до 3)";
             return false;
         }
     }
