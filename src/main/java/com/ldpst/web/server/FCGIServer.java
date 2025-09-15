@@ -1,7 +1,7 @@
 package com.ldpst.web.server;
 
 import com.fastcgi.FCGIInterface;
-import com.laspringweb.router.HTTPRouter;
+import com.laspringweb.router.*;
 import com.ldpst.web.utils.ResultManager;
 
 import java.io.FileWriter;
