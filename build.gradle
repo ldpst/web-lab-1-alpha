@@ -11,10 +11,14 @@ repositories {
 
 dependencies {
     implementation files('./libs/fastcgi-lib.jar')
+    implementation files('./libs/la-spring-web.jar')
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.3'
-    implementation 'org.postgresql:postgresql:42.7.4'
+    implementation 'org.postgresql:postgresql:42.7.7'
+
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
 }
 
 jar {

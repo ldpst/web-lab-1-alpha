@@ -1,21 +1,17 @@
 package com.ldpst.web.server;
 
 import com.fastcgi.FCGIInterface;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.ldpst.web.utils.Checker;
-import com.ldpst.web.utils.PSQLManager;
-import com.ldpst.web.utils.RequestManager;
+import com.laspringweb.router.HTTPRouter;
 import com.ldpst.web.utils.ResultManager;
 
+import java.io.FileWriter;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.Map;
 
 public class FCGIServer extends FCGIInterface {
-    private final static PSQLManager psql = new PSQLManager();
+    private final FileWriter writer = new FileWriter("logs.txt", true);
+    private final HTTPRouter router = new HTTPRouter("com.ldpst.web");
 
-    public FCGIServer() {
+    public FCGIServer() throws IOException {
         super();
     }
 
@@ -31,44 +27,14 @@ public class FCGIServer extends FCGIInterface {
 
     public void handleRequest() throws IOException {
         var method = FCGIInterface.request.params.getProperty("REQUEST_METHOD");
+        var uri = FCGIInterface.request.params.getProperty("REQUEST_URI");
         if (method == null) {
             System.out.println(ResultManager.errorResult("Unsupported HTTP method: null"));
             return;
         }
-        if (method.equals("GET")) {
-            String js = psql.getShoots();
-            System.out.println(ResultManager.okResult(js));
+        int code = router.handleRequest(uri, method);
+        if (code == -1) {
+            System.out.println(ResultManager.errorResult("Unsupported HTTP URI: " + uri));
         }
-        if (method.equals("POST")) {
-            String requestBodyString = RequestManager.readRequestBody();
-            long start = System.nanoTime();
-            Map<String, BigDecimal> requestBody;
-            try {
-                requestBody = RequestManager.parseRequestBody(requestBodyString);
-            } catch (NumberFormatException | NullPointerException e) {
-                System.out.println(ResultManager.errorResult("Invalid request body. Not decimal"));
-                return;
-            } catch (JsonProcessingException e) {
-                System.out.println(ResultManager.errorResult("Invalid JSON body."));
-                return;
-            }
-
-            if (!RequestManager.validate(requestBody)) {
-                System.out.println(ResultManager.errorResult("Invalid request body"));
-                return;
-            }
-
-            boolean check = Checker.check(requestBody);
-
-            String duration = Math.round(((System.nanoTime() - start) / 1e6) * 1e6) / 1e6 + " ms";
-            LocalDateTime end = LocalDateTime.now();
-
-            String result = ResultManager.createdResult(requestBody, duration, end, check);
-            psql.addShoot(requestBody, duration, end, check);
-            System.out.println(result);
-        }
-
     }
-
-
 }

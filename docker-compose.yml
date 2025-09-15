@@ -5,6 +5,8 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - shoots-db
+    volumes:
+      - "./logs:/app/logs"
     networks:
       backend:
 
