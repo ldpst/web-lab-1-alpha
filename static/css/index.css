@@ -191,10 +191,25 @@ body {
 
 }
 
-#res-table {
-    border-collapse: collapse;
+.table-scroll-wrapper {
     width: 85%;
     margin: 20px auto;
+    max-height: 400px;
+    overflow: auto;
+    border: 1px solid #9e9d9d;
+    border-top-left-radius: 15px;
+    scrollbar-width: auto;
+    scrollbar-color: rgb(143, 191, 135) rgb(227, 225, 225);
+    scroll-padding: 10px;
+}
+/*.table-scroll-wrapper::-webkit-scrollbar {*/
+/*    width: 8px;     !* толщина вертикального скролла *!*/
+/*    height: 8px;    !* толщина горизонтального *!*/
+/*}*/
+
+#res-table {
+    border-collapse: collapse;
+    width: 100%;
     table-layout: fixed;
 }
 
@@ -217,7 +232,6 @@ body {
     border: #9e9d9d solid 1px;
     border-bottom: none;
     border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
 }
 
 svg text {
