@@ -22,8 +22,8 @@ body {
 }
 
 #mid-panel {
-    min-width: 100px;
-    width: 700px;
+    min-width: 150px;
+    width: 800px;
     box-shadow: 0 1px 100px rgba(0, 0, 0, 0.5);
     background-color: rgba(255, 255, 255, 0.90);
 }
@@ -119,9 +119,29 @@ body {
     border: #9e9d9d solid 1px;
     width: 150px;
     height: 40px;
+    margin-right: 10px;
     background-color: #a8c9a3;
     font-size: 20px;
     font-family: 'Comic Sans MS', serif;
+}
+
+#clear-btn {
+    cursor: pointer;
+    border-radius: 15px;
+    border: #9e9d9d solid 1px;
+    width: 150px;
+    height: 40px;
+    background-color: #a8c9a3;
+    font-size: 20px;
+    font-family: 'Comic Sans MS', serif;
+}
+
+#clear-btn:hover {
+    background-color: #99c193;
+}
+
+#clear-btn:active {
+    background-color: #8ac380;
 }
 
 #send-btn:hover {

@@ -85,8 +85,19 @@ document.addEventListener("DOMContentLoaded", () => {
             console.log(err);
         });
     });
-})
-;
+
+    const clearBtn = document.getElementById("clear-btn");
+    clearBtn.addEventListener("click", () => {
+        const url = "http://localhost:2909/api/clear";
+        fetch(url, {
+            method: "POST"
+        })
+            .then(clearTable)
+            .catch(err => console.log(err));
+    });
+});
+
+
 
 function addToTable(data) {
     const resTable = document.getElementById("res-table");
@@ -97,6 +108,17 @@ function addToTable(data) {
     row.insertCell(3).textContent = data.duration;
     row.insertCell(4).textContent = data.date;
     row.insertCell(5).textContent = data.check ? "Y" : "N";
+}
+
+function clearTable() {
+    const table = document.getElementById("res-table");
+    const rows = table.rows;
+
+    for (let i = rows.length - 1; i >= 2; i--) {
+        if (i >= 2) {
+            table.deleteRow(i);
+        }
+    }
 }
 
 function checkY(str, error) {

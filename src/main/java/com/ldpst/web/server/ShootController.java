@@ -112,6 +112,8 @@ public class ShootController {
 
     @PostMapping("/api/clear")
     public String clear() {
+        shootsCache.invalidate("GET:/api/shoots");
+        redisManager.invalidate("GET:/api/shoots");
         psql.clear();
         String js = psql.getShoots();
         return ResultManager.unite(ResultManager.getOkHeader(), js);
