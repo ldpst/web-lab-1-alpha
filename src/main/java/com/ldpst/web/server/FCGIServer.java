@@ -1,15 +1,18 @@
 package com.ldpst.web.server;
 
 import com.fastcgi.FCGIInterface;
-import com.laspringweb.router.*;
+import com.ldpst.web.router.RequestRouter;
+import com.ldpst.web.utils.Logger;
 import com.ldpst.web.utils.ResultManager;
 
 import java.io.FileWriter;
 import java.io.IOException;
 
 public class FCGIServer extends FCGIInterface {
+    private final Logger logger = new Logger("logs/logs.txt");
+
     private final FileWriter writer = new FileWriter("logs.txt", true);
-    private final HTTPRouter router = new HTTPRouter("com.ldpst.web");
+    private final RequestRouter requestRouter = new RequestRouter("com.ldpst.web");
 
     public FCGIServer() throws IOException {
         super();
@@ -32,9 +35,6 @@ public class FCGIServer extends FCGIInterface {
             System.out.println(ResultManager.errorResult("Unsupported HTTP method: null"));
             return;
         }
-        int code = router.handleRequest(uri, method);
-        if (code == -1) {
-            System.out.println(ResultManager.errorResult("Unsupported HTTP URI: " + uri));
-        }
+        System.out.println(requestRouter.handleRequest(method, uri));
     }
 }

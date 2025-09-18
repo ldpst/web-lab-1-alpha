@@ -37,6 +37,10 @@ public class RequestManager {
         BigDecimal y = requestBody.get("y");
         BigDecimal r = requestBody.get("r");
 
+        if (x == null || y == null || r == null) {
+            return false;
+        }
+
         try {
             int value = x.intValueExact();
         } catch (ArithmeticException e) {

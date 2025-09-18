@@ -194,7 +194,7 @@ body {
 .table-scroll-wrapper {
     width: 85%;
     margin: 20px auto;
-    max-height: 400px;
+    max-height: 350px;
     overflow: auto;
     border: 1px solid #9e9d9d;
     border-top-left-radius: 15px;

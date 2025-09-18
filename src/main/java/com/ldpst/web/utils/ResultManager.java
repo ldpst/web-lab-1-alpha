@@ -22,38 +22,23 @@ public class ResultManager {
                 """.formatted(error.getBytes(StandardCharsets.UTF_8).length, error);
     }
 
-    public static String createdResult(Map<String, BigDecimal> requestBody, String duration, LocalDateTime date, boolean check) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-
-
+    public static String unite(String header, Map<String, Object> responseMap) {
         ObjectMapper mapper = new ObjectMapper();
-        Map<String, Object> responseMap = new HashMap<>(requestBody);
-        responseMap.put("duration", duration);
-        responseMap.put("date", date.format(formatter));
-        responseMap.put("check", check);
         String js;
         try {
             js = mapper.writeValueAsString(responseMap);
         } catch (JsonProcessingException e) {
             return errorResult(e.getMessage());
         }
-
-        String headers =
-                """
-                        Status: 201 Created
-                        Content-Type: application/json; charset=utf-8
-                        Content-Length: %d
-                        
-                        
-                        %s
-                        
-                        """;
-
-        return headers.formatted(js.getBytes(StandardCharsets.UTF_8).length + 1, js);
+        return unite(header, js);
     }
 
-    public static String okResult(String js) {
-        String headers = """
+    public static String unite(String header, String js) {
+        return header.formatted(js.getBytes(StandardCharsets.UTF_8).length + 1, js);
+    }
+
+    public static String getOkHeader() {
+        return  """
                 Status: 200 OK
                 Content-Type: application/json; charset=utf-8
                 Content-Length: %d
@@ -62,6 +47,17 @@ public class ResultManager {
                 %s
                 
                 """;
-        return headers.formatted(js.getBytes(StandardCharsets.UTF_8).length + 1, js);
+    }
+
+    public static String getCreatedHeader() {
+        return """
+                        Status: 201 Created
+                        Content-Type: application/json; charset=utf-8
+                        Content-Length: %d
+                        
+                        
+                        %s
+                        
+                        """;
     }
 }

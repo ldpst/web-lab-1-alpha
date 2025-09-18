@@ -1,60 +1,113 @@
 package com.ldpst.web.server;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.ldpst.web.utils.Checker;
-import com.ldpst.web.utils.PSQLManager;
-import com.ldpst.web.utils.RequestManager;
-import com.ldpst.web.utils.ResultManager;
-import com.laspringweb.annotation.*;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.ldpst.web.annotations.GetMapping;
+import com.ldpst.web.annotations.PostMapping;
+import com.ldpst.web.annotations.RestController;
+import com.ldpst.web.utils.*;
+
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 public class ShootController {
+    private final Logger logger = new Logger("logs/logs.txt");
+
     private final static PSQLManager psql = new PSQLManager();
+    private final Cache<String, Map<String, Object>> shootCache = Caffeine.newBuilder()
+            .maximumSize(100)
+            .expireAfterWrite(10, TimeUnit.MINUTES)
+            .recordStats()
+            .build();
+
+    private final Cache<String, String> shootsCache = Caffeine.newBuilder()
+            .maximumSize(100)
+            .expireAfterWrite(10, TimeUnit.MINUTES)
+            .recordStats()
+            .build();
+
+    public ShootController() {}
 
     @PostMapping("/api/shoot")
-    public void shoot() throws IOException {
+    public String shoot() throws IOException {
         String requestBodyString = RequestManager.readRequestBody();
         long start = System.nanoTime();
         Map<String, BigDecimal> requestBody;
         try {
             requestBody = RequestManager.parseRequestBody(requestBodyString);
         } catch (NumberFormatException | NullPointerException e) {
-            System.out.println(ResultManager.errorResult("Invalid request body. Not decimal"));
-            return;
+            return ResultManager.errorResult("Invalid request body. Not decimal");
         } catch (JsonProcessingException e) {
-            System.out.println(ResultManager.errorResult("Invalid JSON body."));
-            return;
+            return ResultManager.errorResult("Invalid JSON body.");
         }
+        Map<String, Object> req = shootCache.get(
+                "POST:/api/shoot" +
+                        "?x=" + requestBody.get("x") +
+                        "&y=" + requestBody.get("y") +
+                        "&r=" + requestBody.get("r"),
+                key -> buildShootMap(requestBody));
 
-        if (!RequestManager.validate(requestBody)) {
-            System.out.println(ResultManager.errorResult("Invalid request body"));
-            return;
+        if (req == null) {
+            return ResultManager.errorResult("Invalid request body.");
         }
-
-        boolean check = Checker.check(requestBody);
 
         String duration = Math.round(((System.nanoTime() - start) / 1e6) * 1e6) / 1e6 + " ms";
         LocalDateTime end = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+        String date = end.format(formatter);
 
-        String result = ResultManager.createdResult(requestBody, duration, end, check);
-        psql.addShoot(requestBody, duration, end, check);
-        System.out.println(result);
+        req.put("duration", duration);
+        req.put("date", date);
+
+        String result = ResultManager.unite(ResultManager.getCreatedHeader(), req);
+        shootsCache.invalidate("GET:/api/shoots");
+        psql.addShoot(requestBody, duration, end, (Boolean) req.get("check"));
+        return result;
+    }
+
+    private Map<String, Object> buildShootMap(Map<String, BigDecimal> requestBody) {
+        if (!RequestManager.validate(requestBody)) {
+            return null;
+        }
+        Map<String, Object> requestMap = new HashMap<>(requestBody);
+
+        boolean check = Checker.check(requestBody);
+
+        requestMap.put("check", check);
+
+//                    try {
+//                        Thread.sleep(10000);
+//                    } catch (InterruptedException e) {
+//                        throw new RuntimeException(e);
+//                    }
+
+        return requestMap;
     }
 
     @GetMapping("/api/shoots")
-    public void shoots() {
-        String js = psql.getShoots();
-        System.out.println(ResultManager.okResult(js));
+    public String shoots() {
+        String js = shootsCache.get("GET:/api/shoots", key -> {
+//            try {
+//                Thread.sleep(10000);
+//            } catch (InterruptedException e) {
+//                throw new RuntimeException(e);
+//            }
+            return psql.getShoots();
+        });
+        return ResultManager.unite(ResultManager.getOkHeader(), js);
     }
 
     @PostMapping("/api/clear")
-    public void clear() {
+    public String clear() {
         psql.clear();
         String js = psql.getShoots();
-        System.out.println(ResultManager.okResult(js));
+        return ResultManager.unite(ResultManager.getOkHeader(), js);
     }
 }
