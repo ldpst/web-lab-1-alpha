@@ -33,7 +33,7 @@ public class RequestRouter {
                     registerMethod(method, controllerInstance);
                 }
             } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-                logger.write("error: " + e.getMessage());
+                logger.write("error: " + e.toString());
             }
         }
     }
@@ -59,7 +59,7 @@ public class RequestRouter {
         try {
             return (String) method.invoke(controller);
         } catch (IllegalAccessException | InvocationTargetException e) {
-            logger.write("error: " + e.getMessage());
+            logger.write(e.getCause().toString());
             return ResultManager.errorResult("Unsupported error");
         }
     }

@@ -19,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 @RestController
 public class ShootController {
     private final Logger logger = new Logger("logs/logs.txt");
+    private final RedisManager redisManager = new RedisManager();
 
     private final static PSQLManager psql = new PSQLManager();
     private final Cache<String, Map<String, Object>> shootCache = Caffeine.newBuilder()
@@ -52,11 +53,15 @@ public class ShootController {
                         "?x=" + requestBody.get("x") +
                         "&y=" + requestBody.get("y") +
                         "&r=" + requestBody.get("r"),
-                key -> buildShootMap(requestBody));
+                key -> {
+                    return redisManager.getShoot(key, requestBody);
+                });
 
         if (req == null) {
             return ResultManager.errorResult("Invalid request body.");
         }
+
+
 
         String duration = Math.round(((System.nanoTime() - start) / 1e6) * 1e6) / 1e6 + " ms";
         LocalDateTime end = LocalDateTime.now();
@@ -68,11 +73,12 @@ public class ShootController {
 
         String result = ResultManager.unite(ResultManager.getCreatedHeader(), req);
         shootsCache.invalidate("GET:/api/shoots");
+        redisManager.invalidate("GET:/api/shoots");
         psql.addShoot(requestBody, duration, end, (Boolean) req.get("check"));
         return result;
     }
 
-    private Map<String, Object> buildShootMap(Map<String, BigDecimal> requestBody) {
+    public static Map<String, Object> buildShootMap(Map<String, BigDecimal> requestBody) {
         if (!RequestManager.validate(requestBody)) {
             return null;
         }
@@ -99,7 +105,7 @@ public class ShootController {
 //            } catch (InterruptedException e) {
 //                throw new RuntimeException(e);
 //            }
-            return psql.getShoots();
+            return redisManager.getShoots(key);
         });
         return ResultManager.unite(ResultManager.getOkHeader(), js);
     }

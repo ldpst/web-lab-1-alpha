@@ -20,15 +20,11 @@ public class FCGIServer extends FCGIInterface {
 
     public void start() {
         while (this.FCGIaccept() >= 0) {
-            try {
                 handleRequest();
-            } catch (IOException e) {
-                System.out.println(ResultManager.errorResult("Unsupported error"));
-            }
         }
     }
 
-    public void handleRequest() throws IOException {
+    public void handleRequest() {
         var method = FCGIInterface.request.params.getProperty("REQUEST_METHOD");
         var uri = FCGIInterface.request.params.getProperty("REQUEST_URI");
         if (method == null) {

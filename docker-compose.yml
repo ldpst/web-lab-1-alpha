@@ -5,6 +5,7 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - shoots-db
+      - redis-java
     volumes:
       - "./logs:/app/logs"
     networks:
@@ -26,6 +27,16 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: passsword
       POSTGRES_DB: shoots
+    networks:
+      backend:
+
+  redis-java:
+    image: "redis:latest"
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis-cache:/data
+    command: redis-server --appendonly yes
     networks:
       backend:
 networks:
